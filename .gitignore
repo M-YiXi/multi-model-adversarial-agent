@@ -22,3 +22,7 @@ data/projects/*/
 # OS
 .DS_Store
 Thumbs.db
+
+# Temporary git directory
+.alt_git_dir/
+
