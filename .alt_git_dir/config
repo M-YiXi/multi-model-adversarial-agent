@@ -1,0 +1,8 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = false
+	logallrefupdates = true
+	worktree = C:/Users/qmcqx/Desktop/项目/codex/多维对抗
+	symlinks = false
+	ignorecase = true

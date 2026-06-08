@@ -1,0 +1,45 @@
+default_roles:
+  MX0:
+    anthropic_base_url: https://maas-coding-api.cn-huabei-1.xf-yun.com/anthropic
+    api_key: 4f83de76084338b846a14f13a4d7f32a:MmFiMzJlNDE5MTlmNGIxNDkzNmQyMjAz
+    context_length: 1000000
+    max_output_tokens: 380000
+    model: astron-code-latest
+    openai_base_url: ''
+    temperature: 0.1
+    top_p: 0.3
+  MX1:
+    anthropic_base_url: ''
+    api_key: 4f83de76084338b846a14f13a4d7f32a:MmFiMzJlNDE5MTlmNGIxNDkzNmQyMjAz
+    context_length: 200000
+    max_output_tokens: 8000
+    model: astron-code-latest
+    openai_base_url: https://maas-coding-api.cn-huabei-1.xf-yun.com/v2
+    temperature: 0.2
+    top_p: 0.5
+  MX2:
+    anthropic_base_url: ''
+    api_key: 4f83de76084338b846a14f13a4d7f32a:MmFiMzJlNDE5MTlmNGIxNDkzNmQyMjAz
+    context_length: 1000000
+    max_output_tokens: 380000
+    model: astron-code-latest
+    openai_base_url: https://maas-coding-api.cn-huabei-1.xf-yun.com/v2
+    temperature: 0.3
+    top_p: 0.6
+  MX3:
+    anthropic_base_url: https://maas-coding-api.cn-huabei-1.xf-yun.com/anthropic
+    api_key: 4f83de76084338b846a14f13a4d7f32a:MmFiMzJlNDE5MTlmNGIxNDkzNmQyMjAz
+    context_length: 1000000
+    max_output_tokens: 380000
+    model: astron-code-latest
+    openai_base_url: ''
+    temperature: 1.8
+    top_p: 1.0
+engine_defaults:
+  expected_score: 90
+  max_iterations: 18
+language: zh
+logging:
+  level: INFO
+ui:
+  theme: dark

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多模三维对抗思维引擎</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- ===== 顶部导航栏 ===== -->
+    <header id="top-bar">
+        <div class="logo">
+            <span class="logo-icon">&#9733;</span>
+            <span class="logo-text">多模三维对抗思维引擎</span>
+        </div>
+        <div class="top-actions">
+            <button id="btn-lang-zh" class="btn-sm">中文</button>
+            <button id="btn-lang-en" class="btn-sm">EN</button>
+            <button id="btn-settings" class="btn-sm" title="设置">&#9881; 设置</button>
+        </div>
+    </header>
+
+    <!-- ===== 主布局：三栏 ===== -->
+    <div id="main-container">
+        <!-- 左侧：项目列表 -->
+        <aside id="left-panel">
+            <div class="panel-header">
+                <h3>项目列表</h3>
+                <button id="btn-new-project" class="btn-icon" title="新建项目">+</button>
+            </div>
+            <div id="project-list" class="scrollable">
+                <p class="empty-hint">暂无项目，点击 + 创建</p>
+            </div>
+        </aside>
+
+        <!-- 中间：主对话区 -->
+        <main id="center-panel">
+            <div class="panel-header">
+                <h3 id="chat-title">对抗对话</h3>
+                <div class="chat-controls">
+                    <button id="btn-start" class="btn-sm btn-success">启动对抗</button>
+                    <button id="btn-stop" class="btn-sm btn-danger">停止</button>
+                    <button id="btn-step" class="btn-sm">单步</button>
+                </div>
+            </div>
+            <div id="chat-log" class="scrollable">
+                <div class="welcome-msg">
+                    <h2>欢迎使用多模三维对抗思维引擎</h2>
+                    <p>基于"温度分层+异质对抗+全局收敛"原理的科研级问题求解系统</p>
+                    <p class="hint">输入 /help 查看命令列表 | 选择一个项目开始</p>
+                </div>
+            </div>
+            <div id="input-area">
+                <input type="text" id="chat-input"
+                       placeholder="输入消息或 / 命令..."
+                       autocomplete="off">
+                <button id="btn-send" class="btn-primary">发送</button>
+            </div>
+        </main>
+
+        <!-- 右侧：状态面板 -->
+        <aside id="right-panel">
+            <div class="panel-header"><h3>引擎状态</h3></div>
+            <div class="status-card">
+                <div class="status-row">
+                    <span class="label">状态</span>
+                    <span id="engine-status" class="badge badge-idle">空闲</span>
+                </div>
+                <div class="status-row">
+                    <span class="label">当前轮次</span>
+                    <span id="current-round">0</span>
+                </div>
+            </div>
+
+            <div class="panel-header"><h3>角色状态</h3></div>
+            <div class="role-status">
+                <div class="role-item mx1">
+                    <span class="dot"></span> 殚虑的宰相*主理模型
+                    <span class="role-state">空闲</span>
+                </div>
+                <div class="role-item mx2">
+                    <span class="dot"></span> 敏疑的御史*纠错模型
+                    <span class="role-state">空闲</span>
+                </div>
+                <div class="role-item mx3">
+                    <span class="dot"></span> 谏官发言中*发散模型
+                    <span class="role-state">空闲</span>
+                </div>
+                <div class="role-item mx0">
+                    <span class="dot"></span> 入内都都知*总结模型
+                    <span class="role-state">空闲</span>
+                </div>
+            </div>
+
+            <div class="panel-header"><h3>快捷键</h3></div>
+            <div class="shortcuts">
+                <div><kbd>/help</kbd> 查看命令</div>
+                <div><kbd>/lang zh</kbd> 切换中文</div>
+                <div><kbd>/lang en</kbd> Switch EN</div>
+                <div><kbd>/new</kbd> 新建项目</div>
+                <div><kbd>/config</kbd> 设置</div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- ===== 新建项目弹窗 ===== -->
+    <div id="modal-new-project" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>新建项目</h3>
+                <button class="btn-close" onclick="closeModal('modal-new-project')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label>项目名称 <span class="required">*</span></label>
+                <input type="text" id="new-name" placeholder="不可重复的项目名称">
+
+                <label>项目描述</label>
+                <input type="text" id="new-desc" placeholder="简要描述">
+
+                <label>核心问题 / 主目标 <span class="required">*</span></label>
+                <textarea id="new-goal" rows="3" placeholder="描述要解决的核心问题..."></textarea>
+
+                <label>最大迭代轮次</label>
+                <input type="number" id="new-max-rounds" value="18" min="1" max="100">
+
+                <label>收敛阈值 (0-100)</label>
+                <input type="number" id="new-convergence" value="90" min="0" max="100">
+            </div>
+            <div class="modal-footer">
+                <button class="btn-default" onclick="closeModal('modal-new-project')">取消</button>
+                <button class="btn-primary" onclick="createProject()">创建项目</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 设置弹窗 ===== -->
+    <div id="modal-settings" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>系统设置</h3>
+                <button class="btn-close" onclick="closeModal('modal-settings')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h4>API密钥配置</h4>
+                <label>OpenAI API Key</label>
+                <input type="password" id="api-openai" placeholder="sk-...">
+                <label>Anthropic API Key</label>
+                <input type="password" id="api-anthropic" placeholder="sk-ant-...">
+                <label>DeepSeek API Key</label>
+                <input type="password" id="api-deepseek" placeholder="sk-...">
+                <label>Google API Key</label>
+                <input type="password" id="api-google" placeholder="...">
+            </div>
+            <div class="modal-footer">
+                <button class="btn-default" onclick="closeModal('modal-settings')">取消</button>
+                <button class="btn-primary" onclick="saveSettings()">保存设置</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
